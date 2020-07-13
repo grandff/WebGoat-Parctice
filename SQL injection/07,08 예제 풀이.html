@@ -1,0 +1,22 @@
+
+<h1>7</h1>
+<div>
+    Q) "select * from users where LAST_NAME = '" + userName + "'";
+    전체 사용자 정보 알아내기. (단순 동적 쿼리로 되어있음)
+</div>
+<div>
+    A)  Smith' or 1=1 --  
+    Smith를 통해 테이블 조회를 1차적으로 실시하고, 뒤에 작은 콜론을 붙여서 닫아줌.
+    이후 or 1=1를 붙여서 전체 조회를 시작하는데, '를 인식못하도록 뒤에 주석처리하도록 실시
+</div>
+
+
+<h1>8</h1>
+<div>
+    Q) "select * from users where USERID = " + userID;
+    전체 사용자 정보 알아내기. (마찬가지로 단순 동적 쿼리고, numeric 임)
+</div>
+<div>
+    A) 101 or 1=1
+    numeric이므로 별도 형변환이 필요없음
+</div>
